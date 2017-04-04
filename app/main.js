@@ -1,5 +1,6 @@
 'use strict';
 var Promise = require('bluebird');
+var request = require('request-sync');
 var fs = Promise.promisifyAll(require('fs'));
 var glob = Promise.promisify(require('glob'));
 var git = require('git');
@@ -18,8 +19,14 @@ fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
                 return fs.writeFileAsync(files[0], fs.readFileSync(__dirname + '/protractor.conf.js'), {}).then(function ()
                 {
                     console.info('protractor.conf.js overwriten');
-                });
+                })
             }
+        }).then(function ()
+        {
+            return fs.writeFileAsync(process.env.REPO_PATH + '/Gruntfile.js', request(process.env.GRUNTFILE), {}).then(function ()
+            {
+                console.info('Gruntfile.js overwriten');
+            });
         });
     })
 }).catch(function (err)

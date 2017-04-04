@@ -2,7 +2,8 @@
   "dependencies": {
     "bluebird": "3.5.0",
     "fs": "0.0.1-security",
-    "git": "^0.1.5",
-    "glob": "7.1.1"
+    "git": "0.1.5",
+    "glob": "7.1.1",
+    "request-sync": "1.0.0"
   }
 }
