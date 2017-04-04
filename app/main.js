@@ -1,6 +1,6 @@
 'use strict';
 var Promise = require('bluebird');
-var request = require('request-sync');
+var request = require('sync-request');
 var fs = Promise.promisifyAll(require('fs'));
 var glob = Promise.promisify(require('glob'));
 var git = require('git');
@@ -23,7 +23,7 @@ fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
             }
         }).then(function ()
         {
-            return fs.writeFileAsync(process.env.REPO_PATH + '/Gruntfile.js', request(process.env.GRUNTFILE), {}).then(function ()
+            return fs.writeFileAsync(process.env.REPO_PATH + '/Gruntfile.js', request('GET', process.env.GRUNTFILE).getBody(), {}).then(function ()
             {
                 console.info('Gruntfile.js overwriten');
             });
