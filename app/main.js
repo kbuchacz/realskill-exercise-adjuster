@@ -1,5 +1,6 @@
 'use strict';
 var Promise = require('bluebird');
+var _ = require('lodash');
 var request = require('sync-request');
 var fs = Promise.promisifyAll(require('fs'));
 var glob = Promise.promisify(require('glob'));
@@ -21,14 +22,47 @@ fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
                     console.info('protractor.conf.js overwriten');
                 })
             }
-        }).then(function ()
-        {
-            return fs.writeFileAsync(process.env.REPO_PATH + '/Gruntfile.js', request('GET', process.env.GRUNTFILE).getBody(), {}).then(function ()
-            {
-                console.info('Gruntfile.js overwriten');
-            });
         });
     })
+}).then(function ()
+{
+    return fs.existsAsync(process.env.REPO_PATH + '/bower.json').then(function ()
+    {
+        return fs.writeFileAsync(process.env.REPO_PATH + '/.bowerrc', request('GET', process.env.SCAFFOLDING + '/.bowerrc').getBody(), {}).then(function ()
+        {
+            console.info('realskill.json overwriten');
+        });
+    });
+}).then(function ()
+{
+    return fs.writeFileAsync(process.env.REPO_PATH + '/realskill.json', request('GET', process.env.SCAFFOLDING + '/realskill.json').getBody(), {}).then(function ()
+    {
+        console.info('realskill.json overwriten');
+    });
+}).then(function ()
+{
+    return fs.writeFileAsync(process.env.REPO_PATH + '/Gruntfile.js', request('GET', process.env.SCAFFOLDING + '/Gruntfile.js').getBody(), {}).then(function ()
+    {
+        console.info('Gruntfile.js overwriten');
+    });
+}).then(function ()
+{
+    return fs.writeFileAsync(process.env.REPO_PATH + '/.jshintrc', request('GET', process.env.SCAFFOLDING + '/.jshintrc').getBody(), {}).then(function ()
+    {
+        console.info('.jshintrc overwriten');
+    });
+}).then(function ()
+{
+    return fs.writeFileAsync(process.env.REPO_PATH + '/.gitattributes', request('GET', process.env.SCAFFOLDING + '/.gitattributes').getBody(), {}).then(function ()
+    {
+        console.info('.gitattributes overwriten');
+    });
+}).then(function ()
+{
+    return fs.writeFileAsync(process.env.REPO_PATH + '/.gitignore', request('GET', process.env.SCAFFOLDING + '/.gitignore').getBody(), {}).then(function ()
+    {
+        console.info('.gitignore overwriten');
+    });
 }).catch(function (err)
 {
     console.error('Error: ', err);
