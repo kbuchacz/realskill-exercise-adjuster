@@ -26,13 +26,15 @@ fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
     })
 }).then(function ()
 {
-    return fs.existsAsync(process.env.REPO_PATH + '/bower.json').then(function ()
-    {
+    var bowerJson = request('GET', process.env.SCAFFOLDING + '/bower.json');
+    if(404 != bowerJson.statusCode) {
         return fs.writeFileAsync(process.env.REPO_PATH + '/.bowerrc', request('GET', process.env.SCAFFOLDING + '/.bowerrc').getBody(), {}).then(function ()
         {
-            console.info('realskill.json overwriten');
+            console.info('.bowerrc overwriten');
         });
-    });
+    } else {
+        return Promise.resolve();
+    }
 }).then(function ()
 {
     return fs.writeFileAsync(process.env.REPO_PATH + '/realskill.json', request('GET', process.env.SCAFFOLDING + '/realskill.json').getBody(), {}).then(function ()
