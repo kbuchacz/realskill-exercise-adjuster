@@ -9,6 +9,7 @@ var git = require('git');
 fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
     return glob(process.env.REPO_PATH + '/**/protractor.conf.js', {}).then(function (files) {
         var config = JSON.parse(data);
+        if(!config.scripts){config.scripts = {};}
         config.scripts.test = 'grunt verify --force';
         if(0 < files.length) {
             config.devDependencies['grunt-protractor-runner'] = '4.0.0';
@@ -22,10 +23,10 @@ fs.readFileAsync(process.env.REPO_PATH + '/package.json').then(function (data) {
                 return fs.writeFileAsync(files[0], fs.readFileSync(__dirname + '/protractor.conf.js'), {}).then(function ()
                 {
                     console.info('protractor.conf.js overwriten');
-                })
+                });
             }
         });
-    })
+    });
 }).then(function ()
 {
     var bowerJson = request('GET', process.env.SCAFFOLDING + '/bower.json');
